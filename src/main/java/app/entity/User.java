@@ -6,6 +6,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -31,7 +33,7 @@ public class User implements UserDetails {
     private Timestamp createdDate;
 
     @Column(name="password", length=2000)
-    private String password;
+    private String password = "user";
 
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
@@ -42,6 +44,8 @@ public class User implements UserDetails {
     private Set<Role> roles;
     public User() {
         createdDate = new Timestamp(System.currentTimeMillis());
+        roles = new HashSet<>();
+        roles.add(new Role("ROLE_USER"));
     }
 
     @Override
@@ -138,5 +142,26 @@ public class User implements UserDetails {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return age == user.age &&
+                Objects.equals(id, user.id) &&
+                Objects.equals(name, user.name) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(createdDate, user.createdDate) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(enabled, user.enabled) &&
+                Objects.equals(roles, user.roles);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(id, age, name, email, createdDate, password, enabled, roles);
     }
 }

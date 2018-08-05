@@ -3,6 +3,7 @@ package app.dao;
 
 import app.entity.User;
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -41,16 +42,26 @@ public class UserDaoImpl implements UserDao {
 
 	@Override
 	public List<User> getAll() {
-		return null;
+		Session session = sessionFactory.getCurrentSession();
+		Query query = session.createQuery("from User ");
+		return (List<User>) query.list();
+
 	}
 
 	@Override
-	public void update(User group) {
-
+	public void update(User user) {
+		User user1 = sessionFactory.getCurrentSession().get(User.class, user.getId());
+		user1.setName(user.getName());
+		user1.setEmail(user.getEmail());
+		user1.setCreatedDate(user.getCreatedDate());
+		user1.setAge(user.getAge());
+		sessionFactory.getCurrentSession().save(user1);
 	}
 
 	@Override
 	public void deleteByKey(Long id) {
-
+		Session session = sessionFactory.getCurrentSession();
+		User user = session.byId(User.class).load(id);
+		session.delete(user);
 	}
 }

@@ -1,12 +1,15 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Spring Boot Thymeleaf Hello World Example</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.1.1/css/bootstrap.min.css" />
-    <link rel="stylesheet" th:href="@{/css/main.css}" href="../static/css/main.css" />
+<head th:replace="fragments/header.html::head">
+
 </head>
-<body>
+
+<div th:replace="fragments/fragment.html::div.tasks"></div>
+<div class="container">
+    <form method="get" action="user/add">
+        <input class="btn btn-primary" type="submit" value="Add">
+    </form>
+</div>
 
 <nav class="navbar navbar-inverse">
     <div class="container">
@@ -23,16 +26,51 @@
 </nav>
 
 <div class="container">
+    <table  id="userDataTable" class="display" cellspacing="0" width="100%">
+        <thead>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Register Date</th>
+            <th>Role</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </thead>
+        <tbody id="arrayTable">
 
-    <div class="starter-template">
-        <h1>Spring Boot Web Thymeleaf Example</h1>
-        <h2>
-            <span th:text="'Message: ' + ${message}"></span>
-            <span th:text="'User: ' + ${user}"></span>
-        </h2>
-    </div>
+        <th:block th:each="user : ${users}">
 
+            <tr>
+                <td th:text="${user.id}">...</td>
+                <td th:text="${user.name}">...</td>
+                <td th:text="${user.email}">...</td>
+                <td th:text="${user.age}">...</td>
+                <td th:text="${user.createdDate}">...</td>
+                <td th:text="${user.roles}">...</td>
+                <td name="id">
+                    <a class ="btn btn-primary" th:href="@{'user/edit?id='+${user.id}}">Edit</a>
+                </td>
+                <td name="id">
+                    <a class ="btn btn-primary" th:href="@{'user/delete?id='+${user.id}}">Delete</a>
+                </td>
+            </tr>
+        </th:block>
+        </tbody>
+        <tfoot>
+        <tr>
+            <th>id</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Age</th>
+            <th>Register Date</th>
+            <th>Role</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        </tfoot>
+    </table>
 </div>
-<script type="text/javascript" src="webjars/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+<div th:replace="fragments/footer.html :: footer"></div>

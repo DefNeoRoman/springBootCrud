@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/header.html::head">
+
+</head>
+
+<div th:replace="fragments/fragment.html::div.tasks"></div>
+<div class="container">
+    <h1>Login page</h1>
+    <h2>login or register</h2>
+    <form action="/j_spring_security_check" method="post">
+        <input type="text" class="form-control" name="j_username" placeholder="Email address" required autofocus value=" ">
+        <input type="password" class="form-control" name="j_password" placeholder="Password" required value=" ">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+    </form>
+    <a class="btn btn-lg btn-primary btn-block" href="/register">регистрация</a>
+</div>
+<div th:replace="fragments/footer.html :: footer"></div>

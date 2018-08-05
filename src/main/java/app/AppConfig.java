@@ -4,11 +4,9 @@ package app;
 import app.config.PopulateDB;
 import app.entity.User;
 import org.apache.commons.dbcp2.BasicDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -17,22 +15,37 @@ import javax.sql.DataSource;
 import java.util.Properties;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 @EnableTransactionManagement
 public class AppConfig {
-    @Autowired
-    private Environment env;
+
+    @Value("${user}")
+    private String user;
+    @Value("${password}")
+    private String password;
+    @Value("${driver}")
+    private String driver;
+    @Value("${url}")
+    private String url;
+    @Value("${hibernate.show_sql}")
+    private String showSql;
+    @Value("${hibernate.hbm2ddl.auto}")
+    private String ddlAuto;
+    @Value("${hibernate.dialect}")
+    private String dialect;
+    @Value("${scanPackage}")
+    private String scanPackage;
+
 
     @Bean
     public LocalSessionFactoryBean getSessionFactory() {
         LocalSessionFactoryBean factoryBean = new LocalSessionFactoryBean();
         factoryBean.setDataSource(getDataSource());
         Properties props = new Properties();
-        props.put("hibernate.show_sql", "true");
-        props.put("hibernate.hbm2ddl.auto", "create-drop");
-        props.put("hibernate.dialect","org.hibernate.dialect.MySQLDialect");
+        props.put("hibernate.show_sql", showSql);
+        props.put("hibernate.hbm2ddl.auto", ddlAuto);
+        props.put("hibernate.dialect",dialect);
         factoryBean.setHibernateProperties(props);
-        factoryBean.setPackagesToScan("app.entity");
+        factoryBean.setPackagesToScan(scanPackage);
         factoryBean.setAnnotatedClasses(User.class);
         return factoryBean;
     }
@@ -47,10 +60,10 @@ public class AppConfig {
     @Bean
     public DataSource getDataSource() {
         BasicDataSource dataSource = new BasicDataSource();
-        dataSource.setDriverClassName(env.getProperty("driver"));
-        dataSource.setUrl(env.getProperty("url"));
-        dataSource.setUsername(env.getProperty("user"));
-        dataSource.setPassword(env.getProperty("password"));
+        dataSource.setDriverClassName(driver);
+        dataSource.setUrl(url);
+        dataSource.setUsername(user);
+        dataSource.setPassword(password);
         return dataSource;
     }
     @Bean(initMethod = "init")
