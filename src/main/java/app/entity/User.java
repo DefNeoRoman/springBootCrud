@@ -137,7 +137,15 @@ public class User implements UserDetails {
     }
 
     public Set<Role> getRoles() {
+
         return roles;
+    }
+    public String getRolesString() {
+        StringBuilder sb = new StringBuilder();
+        roles.forEach(role -> {
+            sb.append(role.getName()).append(", ");
+        });
+        return sb.toString().substring(0,sb.length()-2);
     }
 
     public void setRoles(Set<Role> roles) {
