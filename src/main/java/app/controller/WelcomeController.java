@@ -77,4 +77,14 @@ public class WelcomeController {
 
         return "accessDenied";
     }
+    @GetMapping(value = "/register")
+    public String register(Model model){
+        model.addAttribute("user", new User());
+        return "register";
+    }
+    @PostMapping(value = "/register")
+    public String registerPost(@ModelAttribute User user){
+        userService.addUser(user);
+        return "redirect:/";
+    }
 }
