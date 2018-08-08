@@ -4,16 +4,15 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
-
+public class User implements UserDetails,Serializable {
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -37,15 +36,13 @@ public class User implements UserDetails {
 
     @Column(name = "enabled", nullable = false)
     private Boolean enabled = true;
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL}, targetEntity = Role.class)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE,CascadeType.PERSIST}, targetEntity = Role.class)
     @JoinTable(name = "permissions",
             joinColumns = {@JoinColumn(name = "user_id",nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "role_id",nullable = false)})
     private Set<Role> roles;
     public User() {
         createdDate = new Timestamp(System.currentTimeMillis());
-        roles = new HashSet<>();
-        roles.add(new Role("ROLE_USER"));
     }
 
     @Override
@@ -145,7 +142,17 @@ public class User implements UserDetails {
         roles.forEach(role -> {
             sb.append(role.getName()).append(", ");
         });
-        return sb.toString().substring(0,sb.length()-2);
+        if(sb.length()>2){
+            return sb.toString().substring(0,sb.length()-2);
+        }else{
+            if(roles.size() != 0){
+                return roles.stream().findFirst().toString();
+            }else{
+                return "NO_ROLE";
+            }
+
+        }
+
     }
 
     public void setRoles(Set<Role> roles) {
@@ -163,13 +170,13 @@ public class User implements UserDetails {
                 Objects.equals(email, user.email) &&
                 Objects.equals(createdDate, user.createdDate) &&
                 Objects.equals(password, user.password) &&
-                Objects.equals(enabled, user.enabled) &&
-                Objects.equals(roles, user.roles);
+                Objects.equals(enabled, user.enabled);
+
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, age, name, email, createdDate, password, enabled, roles);
+        return Objects.hash(id, age, name, email, createdDate, password, enabled);
     }
 }

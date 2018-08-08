@@ -2,55 +2,50 @@ package app.dao;
 
 
 import app.entity.Role;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Transactional
 @Repository
 public class RoleDaoImpl implements RoleDao {
-	@Autowired
-	private final SessionFactory sessionFactory;
 
-	public RoleDaoImpl(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+	@PersistenceContext
+	private EntityManager em;
 
 	public Role getRoleByRoleName(String roleName) {
-		return (Role) sessionFactory.getCurrentSession().createQuery("FROM Role WHERE name = :name").setParameter("name", roleName).uniqueResult();
+		Role role = (Role) em.createQuery("SELECT u FROM Role u WHERE u.name =:rolename").setParameter("rolename", roleName).getSingleResult();
+		return role;
 	}
 
 	@Override
 	public void persist(Role entity) {
-		sessionFactory.getCurrentSession().save(entity);
+		em.persist(entity);
 	}
 
 	@Override
 	public Role getByKey(Long id) {
-		return  sessionFactory.getCurrentSession().get(Role.class, id);
+
+		return  em.find(Role.class, id);
 	}
 
 	@Override
 	public List<Role> getAll() {
-		Session session = sessionFactory.getCurrentSession();
-		Query query = session.createQuery("from Role ");
-		return (List<Role>) query.list();
+
+		return 	em.createQuery("from Role ").getResultList();
 	}
 
 	@Override
-	public void update(Role group) {
-		Role role = sessionFactory.getCurrentSession().get(Role.class, group.getId());
-		role.setName(group.getName());
-		sessionFactory.getCurrentSession().save(role);
+	public void update(Role role) {
+	 em.merge(role);
 	}
 
 	@Override
 	public void deleteByKey(Long id) {
-		throw new UnsupportedOperationException();
+		Role role = em.find(Role.class, id);
+		em.remove(role);
 	}
 }

@@ -2,66 +2,51 @@ package app.dao;
 
 
 import app.entity.User;
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 
-@Transactional
+
 @Repository
+@Transactional
 public class UserDaoImpl implements UserDao {
 
-	private final SessionFactory sessionFactory;
-
-	@Autowired
-	public UserDaoImpl(SessionFactory sessionFactory) {
-		this.sessionFactory = sessionFactory;
-	}
+	@PersistenceContext
+	private EntityManager em;
 
 	public User getUserByUsername(String name) {
-		Query query= sessionFactory.getCurrentSession().
-				createQuery("from User where name=:name");
-		query.setParameter("name", name);
-		return (User) query.uniqueResult();
+        User user = (User) em.createQuery("SELECT u FROM User u WHERE u.name =:username").setParameter("username", name).getSingleResult();
+        return user;
 	}
 
 	@Override
 	public void persist(User entity) {
-		sessionFactory.getCurrentSession().save(entity);
+	    em.persist(entity);
 	}
 
 	@Override
 	public User getByKey(Long id) {
-		return sessionFactory.getCurrentSession().get(User.class, id);
+		return em.find(User.class,id);
 	}
 
 	@Override
 	public List<User> getAll() {
-		Session session = sessionFactory.getCurrentSession();
-		Query query = session.createQuery("from User ");
-		return (List<User>) query.list();
+       return em.createQuery("FROM User").getResultList();
 
 	}
 
 	@Override
 	public void update(User user) {
-		User user1 = sessionFactory.getCurrentSession().get(User.class, user.getId());
-		user1.setName(user.getName());
-		user1.setEmail(user.getEmail());
-		user1.setCreatedDate(user.getCreatedDate());
-		user1.setAge(user.getAge());
-		sessionFactory.getCurrentSession().save(user1);
+        em.merge(user);
 	}
 
 	@Override
 	public void deleteByKey(Long id) {
-		Session session = sessionFactory.getCurrentSession();
-		User user = session.byId(User.class).load(id);
-		session.delete(user);
+        User entity =  em.find(User.class, id);
+        em.remove(entity);
 	}
 }

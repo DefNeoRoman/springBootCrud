@@ -3,12 +3,13 @@ package app.entity;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
 
 @Entity
 @Table(name = "roles")
-public class Role implements GrantedAuthority {
+public class Role implements GrantedAuthority{
 
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -18,7 +19,7 @@ public class Role implements GrantedAuthority {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.ALL},targetEntity = User.class)
+    @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST},targetEntity = User.class)
     @JoinTable(name = "permissions",joinColumns = {@JoinColumn(name = "role_id",nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "user_id",nullable = false)})
     private List<User> users;

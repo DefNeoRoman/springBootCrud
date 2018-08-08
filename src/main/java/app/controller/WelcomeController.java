@@ -32,9 +32,13 @@ public class WelcomeController {
         return "edit";
     }
 
-    @RequestMapping(value = "/user/edit", method = RequestMethod.POST)
+    @PostMapping(value = "/user/edit")
     public String postEdit(@ModelAttribute User user) {
-        userService.updateUser(user);
+        User userById = userService.getUserById(user.getId());
+        userById.setName(user.getName());
+        userById.setAge(user.getAge());
+        userById.setEmail(user.getEmail());
+        userService.updateUser(userById);
         return "redirect:/user";
     }
 
@@ -50,7 +54,7 @@ public class WelcomeController {
         return "add";
     }
 
-    @RequestMapping(value = "/user/add", method = RequestMethod.POST)
+    @PostMapping(value = "/user/add")
     public String postAdd(@ModelAttribute User user) {
         userService.addUser(user);
         return "redirect:/user";

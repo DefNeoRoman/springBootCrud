@@ -16,43 +16,55 @@ public class PopulateDB {
     private UserService userService;
 
     @Autowired
-    private RoleService roleService;
+    RoleService roleService;
+
 
     public void init() {
 
+       initAdmin();
+       initUser();
+       initUserUp();
+       changeName();
+     }
+
+
+    public void initAdmin() {
         Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleUser = new Role("ROLE_USER");
-        roleService.addRole(roleAdmin);
-        roleService.addRole(roleUser);
-
         User admin = new User();
         admin.setName("admin");
         admin.setPassword("admin");
         Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(roleAdmin);
         adminRoles.add(roleUser);
+        System.out.println("adminRoles size: " + adminRoles.size());
         admin.setRoles(adminRoles);
         userService.addUser(admin);
 
+    }
 
+    public void initUser() {
+        Role roleById = roleService.getRoleById(2L);
         User user = new User();
         user.setName("user");
-        Set<Role> userRoles = new HashSet<>();
-        userRoles.add(new Role("ROLE_USER"));
-        user.setRoles(userRoles);
-        userService.addUser(user);
+        user.setPassword("user");
+        roleById.getUsers().add(user);
+        roleService.updateRoles(roleById);
+     }
 
-
-
+    public void initUserUp() {
+        Role roleUser = roleService.getRoleById(2L);
         User userUp = new User();
         userUp.setName("userUp");
-        Set<Role> userUpRoles = new HashSet<>();
-        userUpRoles.add(roleUser);
-        userUp.setRoles(userUpRoles);
-        userService.addUser(userUp);
+        userUp.setPassword("user");
+        roleUser.getUsers().add(userUp);
+        roleService.updateRoles(roleUser);
+    }
+    public void changeName() {
+        User userUp = userService.getUserById(2L);
+        userUp.setName("userUpgggggggggggg");
+        userUp.setPassword("user");
+        userService.updateUser(userUp);
 
-
-
-
-     }
+    }
 }
