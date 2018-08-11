@@ -14,13 +14,13 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthSuccessHandler customizeAuthenticationSuccessHandler;
 
     @Autowired
-    public SecurityConfig(UserDetailsServiceImpl userDetailsService, AuthSuccessHandler customizeAuthenticationSuccessHandler) {
+    public AppSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthSuccessHandler customizeAuthenticationSuccessHandler) {
         this.userDetailsService = userDetailsService;
         this.customizeAuthenticationSuccessHandler = customizeAuthenticationSuccessHandler;
     }

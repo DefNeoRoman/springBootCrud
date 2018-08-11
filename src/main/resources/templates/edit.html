@@ -5,6 +5,7 @@
 </head>
 <div th:replace="fragments/fragment.html::div.tasks"></div>
 <div class="container">
+    <br>
     <a href="/" class="btn btn-primary">
         Back
     </a>
@@ -22,6 +23,14 @@
             <label for="age" class="control-label col-xs-3">User age</label>
             <div class="col-xs-9">
                 <input type="text" class="form-control" id="age" name="age" th:value="${user.age}">
+                <br>
+                <div>
+
+                    <input type="checkbox" id="role_user" name="role_user"   th:checked="${roleUser}"/>
+                    <label for="role_user">ROLE_USER</label>
+                    <input type="checkbox" id="role_admin" name="role_admin"  th:checked="${roleAdmin}"/>
+                    <label for="role_admin">ROLE_ADMIN</label>
+                </div>
             </div>
         </div>
         <div class="form-group">

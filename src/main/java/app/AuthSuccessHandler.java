@@ -35,7 +35,7 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
 
         String targetUrl = determineTargetUrl(authentication);
         if (response.isCommitted()) {
-            logger.debug("Response has already been committed. Unable to redirect to "+ targetUrl);
+            logger.debug("Response has already been committed. Unable to redirect to " + targetUrl);
             return;
         }
 
@@ -43,25 +43,15 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
     }
 
     protected String determineTargetUrl(Authentication authentication) {
-        boolean isUser = false;
-        boolean isAdmin = false;
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (GrantedAuthority grantedAuthority : authorities) {
             if (grantedAuthority.getAuthority().equals("ROLE_USER")) {
-                isUser = true;
-                break;
+                return "/userTask";
             } else if (grantedAuthority.getAuthority().equals("ROLE_ADMIN")) {
-                isAdmin = true;
-                break;
+                return "/user";
             }
         }
-        if (isUser) {
-            return "/userTask";
-        } else if (isAdmin) {
-            return "/user";
-        } else {
-            throw new IllegalStateException();
-        }
+        throw new IllegalStateException();
     }
 
     protected void clearAuthenticationAttributes(HttpServletRequest request) {
@@ -70,13 +60,5 @@ public class AuthSuccessHandler implements AuthenticationSuccessHandler {
             return;
         }
         session.removeAttribute(WebAttributes.AUTHENTICATION_EXCEPTION);
-    }
-
-    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-        this.redirectStrategy = redirectStrategy;
-    }
-
-    protected RedirectStrategy getRedirectStrategy() {
-        return redirectStrategy;
     }
 }
