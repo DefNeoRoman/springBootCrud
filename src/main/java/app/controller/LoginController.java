@@ -1,7 +1,7 @@
 package app.controller;
 
-import app.entity.Role;
-import app.entity.User;
+import app.model.Role;
+import app.model.User;
 import app.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class WelcomeController {
+public class LoginController {
 
     final RoleService roleService;
 
     @Autowired
-    public WelcomeController(RoleService roleService) {
+    public LoginController(RoleService roleService) {
           this.roleService = roleService;
     }
 

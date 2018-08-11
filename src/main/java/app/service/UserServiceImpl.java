@@ -1,10 +1,9 @@
 package app.service;
 
 
-import app.dao.RoleDao;
 import app.dao.UserDao;
-import app.entity.Role;
-import app.entity.User;
+import app.model.Role;
+import app.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,12 +15,12 @@ import java.util.Set;
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
-	private final UserDao userDAO;
-	private final RoleDao roleDao;
+	private final
+	UserDao userDAO;
+
 
 	@Autowired
-	public UserServiceImpl(RoleDao roleDao, UserDao userDAO) {
-		this.roleDao = roleDao;
+	public UserServiceImpl(UserDao userDAO) {
 		this.userDAO = userDAO;
 	}
 
@@ -43,7 +42,6 @@ public class UserServiceImpl implements UserService {
 	}
 
 	public void deleteUserById(Long id) {
-
 
 		userDAO.deleteByKey(id);
 	}

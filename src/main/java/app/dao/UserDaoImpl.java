@@ -1,7 +1,7 @@
 package app.dao;
 
 
-import app.entity.User;
+import app.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 

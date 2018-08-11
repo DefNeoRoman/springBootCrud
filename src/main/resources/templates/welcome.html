@@ -14,9 +14,6 @@
 <br>
 <nav class="navbar navbar-inverse">
     <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">Spring Boot</a>
-        </div>
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <li class="active"><a href="#">Home</a></li>
@@ -27,7 +24,7 @@
 </nav>
 
 <div class="container">
-    <table  id="userDataTable" class="display" cellspacing="0" width="100%">
+    <table id="userDataTable" class="display" cellspacing="0" width="100%">
         <thead>
         <tr>
             <th>id</th>
@@ -52,10 +49,10 @@
                 <td th:text="${user.createdDate}">...</td>
                 <td th:text="${user.getRolesString()}">...</td>
                 <td name="id">
-                    <a class ="btn btn-primary" th:href="@{'user/edit?id='+${user.id}}">Edit</a>
+                    <a class="btn btn-primary" th:href="@{'user/edit?id='+${user.id}}">Edit</a>
                 </td>
                 <td name="id">
-                    <a class ="btn btn-primary" th:href="@{'user/delete?id='+${user.id}}">Delete</a>
+                    <a class="btn btn-primary" th:href="@{'user/delete?id='+${user.id}}">Delete</a>
                 </td>
             </tr>
         </th:block>

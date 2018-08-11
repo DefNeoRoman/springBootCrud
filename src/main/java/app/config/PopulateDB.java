@@ -1,8 +1,8 @@
 package app.config;
 
 
-import app.entity.Role;
-import app.entity.User;
+import app.model.Role;
+import app.model.User;
 import app.service.RoleService;
 import app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ public class PopulateDB {
     private UserService userService;
 
     @Autowired
-    RoleService roleService;
+    private RoleService roleService;
 
 
     public void init() {
@@ -28,7 +28,7 @@ public class PopulateDB {
      }
 
 
-    public void initAdmin() {
+    private void initAdmin() {
         Role roleAdmin = new Role("ROLE_ADMIN");
         Role roleUser = new Role("ROLE_USER");
         User admin = new User();
@@ -43,7 +43,7 @@ public class PopulateDB {
 
     }
 
-    public void initUser() {
+    private void initUser() {
         Role roleById = roleService.getRoleById(2L);
         User user = new User();
         user.setName("user");
@@ -52,7 +52,7 @@ public class PopulateDB {
         roleService.updateRoles(roleById);
      }
 
-    public void initUserUp() {
+    private void initUserUp() {
         Role roleUser = roleService.getRoleById(2L);
         User userUp = new User();
         userUp.setName("userUp");
@@ -60,7 +60,7 @@ public class PopulateDB {
         roleUser.getUsers().add(userUp);
         roleService.updateRoles(roleUser);
     }
-    public void changeName() {
+    private void changeName() {
         User userUp = userService.getUserById(2L);
         userUp.setName("userUpgggggggggggg");
         userUp.setPassword("user");

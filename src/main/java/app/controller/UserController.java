@@ -1,7 +1,7 @@
 package app.controller;
 
-import app.entity.Role;
-import app.entity.User;
+import app.model.Role;
+import app.model.User;
 import app.service.RoleService;
 import app.service.UserService;
 import org.slf4j.Logger;
@@ -41,7 +41,6 @@ public class UserController {
 
     @GetMapping("/edit")
     public String edit(@RequestParam Long id, Map<String, Object> model) {
-
         User userById = userService.getUserById(id);
         Set<Role> roles = userById.getRoles();
         model.put("roleUser",false);
@@ -54,7 +53,6 @@ public class UserController {
             }
         });
         model.put("user", userById);
-
         return "edit";
     }
 

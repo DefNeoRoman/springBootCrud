@@ -1,7 +1,7 @@
 package app.dao;
 
 
-import app.entity.Role;
+import app.model.Role;
 import org.springframework.transaction.annotation.Transactional;
 
 @Transactional

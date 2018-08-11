@@ -1,7 +1,7 @@
 package app.service;
 
 
-import app.entity.Role;
+import app.model.Role;
 
 import java.util.List;
 
