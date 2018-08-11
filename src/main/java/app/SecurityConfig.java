@@ -38,12 +38,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/resources/**", "/webjars/**","/register").permitAll()
                 .antMatchers("/user/**","/adminTask").access("hasRole('ROLE_ADMIN')")
-
                 .antMatchers("/userTask").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
                 .anyRequest().authenticated()
                 .and()
                 .exceptionHandling().accessDeniedPage("/accessDenied");
-
 
         http.formLogin().successHandler(customizeAuthenticationSuccessHandler)
                 .loginPage("/login")

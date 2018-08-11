@@ -1,8 +1,10 @@
 package app.dao;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.io.Serializable;
 import java.util.List;
-
+@Transactional
 public interface GenericDao<PK extends Serializable, T> {
 
 	void persist(T entity);
