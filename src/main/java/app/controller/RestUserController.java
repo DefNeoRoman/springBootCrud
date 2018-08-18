@@ -7,7 +7,6 @@ import app.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +14,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-@RequestMapping("/user")
-@Controller
-public class UserController {
+
+@RequestMapping("/rest/user")
+@RestController
+public class RestUserController {
 
     private final
     Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -29,19 +29,19 @@ public class UserController {
     UserService userService;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService) {
+    public RestUserController(UserService userService, RoleService roleService) {
         this.userService = userService;
         this.roleService = roleService;
     }
 
-    @GetMapping
-    public String welcome(Map<String, Object> model) {
-        model.put("users", userService.getAllUser());
-        return "welcome";
+    @GetMapping("/all")
+    public  List<User> welcome() {
+
+        return userService.getAllUser();
     }
 
     @GetMapping("/edit")
-    public String edit(@RequestParam Long id, Map<String, Object> model) {
+    public  Map<String, Object> edit(@RequestParam Long id, Map<String, Object> model) {
         User userById = userService.getUserById(id);
         Set<Role> roles = userById.getRoles();
         model.put("roleUser",false);
@@ -54,11 +54,11 @@ public class UserController {
             }
         });
         model.put("user", userById);
-        return "edit";
+        return model;
     }
-
-    @PostMapping(value = "/edit")
-    public String postEdit(@ModelAttribute User user,
+    // Put - обновление
+    @PutMapping(value = "/edit")
+    public void postEdit(  @ModelAttribute User user,
                            @RequestParam(required = false) String role_user,
                            @RequestParam(required = false) String role_admin) {
         User userById = userService.getUserById(user.getId());
@@ -87,24 +87,22 @@ public class UserController {
         roleService.updateRoles(role_user1);
         roleService.updateRoles(role_admin1);
         userService.updateUser(userById);
-        return "redirect:/user";
+
     }
 
-    @GetMapping("/delete")
-    public String delete(@RequestParam Long id) {
+    @DeleteMapping
+    public void delete(@RequestParam Long id) {
         userService.deleteUserById(id);
-        return "redirect:/user";
     }
 
     @GetMapping("/add")
-    public String add(Model model) {
+    public Model add(Model model) {
         model.addAttribute("user", new User());
-        return "add";
+        return model;
     }
-
-    @PostMapping(value = "/add")
-    public String postAdd(@ModelAttribute User user) {
+    //Post - создание
+    @PostMapping
+    public void putAdd(@ModelAttribute User user) {
         userService.addUser(user);
-        return "redirect:/user";
     }
 }

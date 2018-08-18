@@ -1,7 +1,6 @@
-package app;
+package app.config;
 
 
-import app.config.PopulateDB;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;

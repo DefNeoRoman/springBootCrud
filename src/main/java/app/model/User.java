@@ -1,5 +1,6 @@
 package app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -40,6 +41,7 @@ public class User implements UserDetails,Serializable {
     @JoinTable(name = "permissions",
             joinColumns = {@JoinColumn(name = "user_id",nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "role_id",nullable = false)})
+    @JsonIgnore
     private Set<Role> roles;
     public User() {
         createdDate = new Timestamp(System.currentTimeMillis());

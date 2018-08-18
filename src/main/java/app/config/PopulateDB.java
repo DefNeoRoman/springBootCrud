@@ -3,8 +3,8 @@ package app.config;
 
 import app.model.Role;
 import app.model.User;
-import app.service.RoleService;
-import app.service.UserService;
+import app.service.interfaces.RoleService;
+import app.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

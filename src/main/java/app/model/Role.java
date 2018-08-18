@@ -1,5 +1,6 @@
 package app.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
@@ -21,6 +22,7 @@ public class Role implements GrantedAuthority{
     @ManyToMany(fetch = FetchType.EAGER,cascade = {CascadeType.MERGE,CascadeType.PERSIST},targetEntity = User.class)
     @JoinTable(name = "permissions",joinColumns = {@JoinColumn(name = "role_id",nullable = false)},
             inverseJoinColumns = {@JoinColumn(name = "user_id",nullable = false)})
+    @JsonIgnore
     private List<User> users;
 
     public Role() {

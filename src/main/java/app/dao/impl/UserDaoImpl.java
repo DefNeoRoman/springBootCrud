@@ -1,6 +1,7 @@
-package app.dao;
+package app.dao.impl;
 
 
+import app.dao.interfaces.UserDao;
 import app.model.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

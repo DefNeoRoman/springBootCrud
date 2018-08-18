@@ -1,6 +1,7 @@
-package app.dao;
+package app.dao.interfaces;
 
 
+import app.dao.interfaces.GenericDao;
 import app.model.Role;
 import org.springframework.transaction.annotation.Transactional;
 

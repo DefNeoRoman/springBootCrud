@@ -1,4 +1,4 @@
-package app.dao;
+package app.dao.interfaces;
 
 import org.springframework.transaction.annotation.Transactional;
 

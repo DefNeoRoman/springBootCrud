@@ -1,6 +1,6 @@
-package app;
+package app.config;
 
-import app.service.UserDetailsServiceImpl;
+import app.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,6 +15,7 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
+
     private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthSuccessHandler customizeAuthenticationSuccessHandler;
@@ -36,7 +37,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/webjars/**","/register").permitAll()
+                .antMatchers("/resources/**", "/webjars/**","/register","/rest/user/**").permitAll()
                 .antMatchers("/user/**","/adminTask").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/userTask").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
                 .anyRequest().authenticated()

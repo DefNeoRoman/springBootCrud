@@ -1,9 +1,10 @@
-package app.service;
+package app.service.impl;
 
 
-import app.dao.UserDao;
+import app.dao.interfaces.UserDao;
 import app.model.Role;
 import app.model.User;
+import app.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -1,8 +1,9 @@
-package app.service;
+package app.service.impl;
 
 
-import app.dao.RoleDao;
+import app.dao.interfaces.RoleDao;
 import app.model.Role;
+import app.service.interfaces.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

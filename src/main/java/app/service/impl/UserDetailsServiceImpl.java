@@ -1,7 +1,8 @@
-package app.service;
+package app.service.impl;
 
 import app.model.Role;
 import app.model.User;
+import app.service.interfaces.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
