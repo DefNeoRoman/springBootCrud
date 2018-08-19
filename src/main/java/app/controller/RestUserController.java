@@ -7,12 +7,9 @@ import app.service.interfaces.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 
 @RequestMapping("/rest/user")
@@ -41,24 +38,14 @@ public class RestUserController {
     }
 
     @GetMapping("/edit")
-    public  Map<String, Object> edit(@RequestParam Long id, Map<String, Object> model) {
-        User userById = userService.getUserById(id);
-        Set<Role> roles = userById.getRoles();
-        model.put("roleUser",false);
-        model.put("roleAdmin",false);
-        roles.forEach(role -> {
-            if(role.getName().equals("ROLE_USER")){
-                model.put("roleUser",true);
-            }else if(role.getName().equals("ROLE_ADMIN")){
-                model.put("roleAdmin",true);
-            }
-        });
-        model.put("user", userById);
-        return model;
+    public  User edit(@RequestParam Long id) {
+
+
+        return userService.getUserById(id);
     }
     // Put - обновление
     @PutMapping(value = "/edit")
-    public void postEdit(  @ModelAttribute User user,
+    public void postEdit(  @RequestBody User user,
                            @RequestParam(required = false) String role_user,
                            @RequestParam(required = false) String role_admin) {
         User userById = userService.getUserById(user.getId());
@@ -96,13 +83,13 @@ public class RestUserController {
     }
 
     @GetMapping("/add")
-    public Model add(Model model) {
-        model.addAttribute("user", new User());
-        return model;
+    public User add() {
+
+        return new User();
     }
     //Post - создание
     @PostMapping
-    public void putAdd(@ModelAttribute User user) {
+    public void postAdd(@RequestBody User user) {
         userService.addUser(user);
     }
 }
