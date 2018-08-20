@@ -1,5 +1,6 @@
 package app.controller;
 
+import app.dto.UserTO;
 import app.model.Role;
 import app.model.User;
 import app.service.interfaces.RoleService;
@@ -9,7 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 //TODO: rest -> api
 @RequestMapping("/rest/user")
@@ -32,48 +35,43 @@ public class RestUserController {
     }
 
     @GetMapping("/all")
-    public  List<User> welcome() {
+    public List<User> welcome() {
 
         return userService.getAllUser();
     }
 
     @GetMapping("/edit")
-    public  User edit(@RequestParam Long id) {
-
-
+    public User edit(@RequestParam Long id) {
         return userService.getUserById(id);
     }
+
     // Put - обновление
     @PutMapping(value = "/edit")
-    public void postEdit(  @RequestBody User user,
-                           @RequestParam(required = false) String role_user,
-                           @RequestParam(required = false) String role_admin) {
+    public void postEdit(@RequestBody UserTO user) {
         User userById = userService.getUserById(user.getId());
         userById.setName(user.getName());
         userById.setAge(user.getAge());
         userById.setEmail(user.getEmail());
-        Role role_user1 = roleService.getRoleByRoleName("ROLE_USER");
-        Role role_admin1 = roleService.getRoleByRoleName("ROLE_ADMIN");
-        List<User> users = role_user1.getUsers();
-        List<User> adminUsers = role_admin1.getUsers();
-        if (role_user != null) {
-            if(!users.contains(userById)){
+        List<Role> allRoles = roleService.getAllRoles();
+        List<Role> presentRoles = new ArrayList<>();
+        Set<Long> rolesID = user.getRolesID();
+        rolesID.forEach(roleID -> {
+            Role roleById = roleService.getRoleById(roleID);
+            presentRoles.add(roleById);
+            List<User> users = roleById.getUsers();
+            if (!users.contains(userById)) {
                 users.add(userById);
             }
-        }else{
-            users.remove(userById);
-        }
-        if (role_admin != null) {
-            if(!adminUsers.contains(userById)){
-                adminUsers.add(userById);
+        });
+        List<Role> result = new ArrayList<>();
+        allRoles.forEach(roleIn -> {
+            if (!presentRoles.contains(roleIn)) {
+                result.add(roleIn);
             }
-        }else{
-            adminUsers.remove(userById);
-        }
-        roleService.updateRoles(role_user1);
-        roleService.updateRoles(role_admin1);
+        });
+        result.forEach(role -> role.getUsers().remove(userById));
+        allRoles.forEach(roleService::updateRoles);
         userService.updateUser(userById);
-
     }
 
     @DeleteMapping
@@ -86,6 +84,7 @@ public class RestUserController {
 
         return new User();
     }
+
     //Post - создание
     @PostMapping
     public void postAdd(@RequestBody User user) {

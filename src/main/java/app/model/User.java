@@ -43,6 +43,7 @@ public class User implements UserDetails,Serializable {
             inverseJoinColumns = {@JoinColumn(name = "role_id",nullable = false)})
     @JsonIgnore
     private Set<Role> roles;
+
     public User() {
         createdDate = new Timestamp(System.currentTimeMillis());
     }
