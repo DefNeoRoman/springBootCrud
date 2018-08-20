@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+//TODO: rest -> api
 @RequestMapping("/rest/user")
 @RestController
 public class RestUserController {
@@ -60,7 +60,6 @@ public class RestUserController {
             if(!users.contains(userById)){
                 users.add(userById);
             }
-
         }else{
             users.remove(userById);
         }

@@ -73,7 +73,6 @@ public class UserController {
             if(!users.contains(userById)){
                 users.add(userById);
             }
-
         }else{
             users.remove(userById);
         }
