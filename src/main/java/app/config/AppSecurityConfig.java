@@ -53,6 +53,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
                 .usernameParameter("j_username")
                 .passwordParameter("j_password")
                 .permitAll();
+        
         http.logout()
                 .permitAll()
                 .logoutUrl("/logout")
