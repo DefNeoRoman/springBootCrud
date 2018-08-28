@@ -1,5 +1,3 @@
-package com.crudWebSpringBoot.crudWeb;
-
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -7,7 +5,7 @@ import com.github.scribejava.core.model.OAuthRequest;
 import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.model.Verifier;
 import com.github.scribejava.core.oauth.OAuth20Service;
-import org.junit.Test;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,11 +13,11 @@ import java.util.Scanner;
 
 public class TestRole {
 
-    private String clientId = "47900127570-nnom98ab0tdrsuavgtbiraplocr77rn8.apps.googleusercontent.com";
-    private String clientSecret="_0bGyS-XhD3TalqGvFAdw4Be";
+    private static String clientId = "47900127570-nnom98ab0tdrsuavgtbiraplocr77rn8.apps.googleusercontent.com";
+    private static String clientSecret="_0bGyS-XhD3TalqGvFAdw4Be";
     private static final String NETWORK_NAME = "http://localhost:8080";
     private static final String PROTECTED_RESOURCE_URL = "http://localhost:8080/rest/user/all";
-    @Test
+
     public void test(){
         List<Integer> integers = new ArrayList<>();
         integers.add(1);
@@ -38,8 +36,8 @@ public class TestRole {
         }
       result.forEach(System.out::println);
     }
-    @Test
-    public void credTestOAuth(){
+
+    public static void main (String... args){
         final OAuth20Service service = new ServiceBuilder().apiKey(clientId)
                 .apiSecret(clientSecret).scope("profile")
                 .callback("http://localhost:8080/login")
