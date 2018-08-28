@@ -14,7 +14,6 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
-@EnableOAuth2Sso
 @EnableGlobalMethodSecurity(securedEnabled = true)
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
