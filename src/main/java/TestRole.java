@@ -6,10 +6,7 @@ import com.github.scribejava.core.model.Verb;
 import com.github.scribejava.core.model.Verifier;
 import com.github.scribejava.core.oauth.OAuth20Service;
 
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class TestRole {
 
@@ -38,16 +35,19 @@ public class TestRole {
     }
 
     public static void main (String... args){
+
         final OAuth20Service service = new ServiceBuilder().apiKey(clientId)
                 .apiSecret(clientSecret).scope("profile")
                 .callback("http://localhost:8080/login")
                 .build(GoogleApi20.instance());
-        final Scanner in = new Scanner(System.in);
+        final Scanner in = new Scanner(System.in, "UTF-8");
         System.out.println("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
         System.out.println();
-        // Obtain the Authorization URL
         System.out.println("Fetching the Authorization URL...");
-        final String authorizationUrl = service.getAuthorizationUrl();
+        final Map<String, String> additionalParams = new HashMap<>();
+        additionalParams.put("access_type", "offline");
+        additionalParams.put("prompt", "consent");
+        final String authorizationUrl = service.getAuthorizationUrl(additionalParams);
         System.out.println("Got the Authorization URL!");
         System.out.println("Now go and authorize ScribeJava here:");
         System.out.println(authorizationUrl);
@@ -55,23 +55,20 @@ public class TestRole {
         System.out.print(">>");
         final String code = in.nextLine();
         System.out.println();
-        // Trade the Request Token and Verfier for the Access Token
         System.out.println("Trading the Request Token for an Access Token...");
-        final OAuth2AccessToken accessToken = service.getAccessToken(new Verifier(code));
+        OAuth2AccessToken accessToken = service.getAccessToken(new Verifier(code));
         System.out.println("Got the Access Token!");
+        System.out.println("(The raw response looks like this: " + accessToken.getRawResponse() + "')");
+        System.out.println("Refreshing the Access Token...");
+        accessToken = service.refreshAccessToken(accessToken.getRefreshToken());
+        System.out.println("Refreshed the Access Token!");
         System.out.println("(The raw response looks like this: " + accessToken.getRawResponse() + "')");
         System.out.println();
         System.out.println("Now we're going to access a protected resource...");
+        System.out.println("Paste fieldnames to fetch (leave empty to get profile, 'exit' to stop example)");
         final OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL,service);
         service.signRequest(accessToken, request);
-        final String response = service.getAuthorizationUrl();
-        System.out.println("Got it! Lets see what we found...");
-        System.out.println();
+        String response = request.send().getBody();
         System.out.println(response);
-        System.out.println(response);
-        System.out.println();
-        System.out.println("Thats it man! Go and build something awesome with ScribeJava! :)");
     }
-
-
 }
