@@ -21,5 +21,5 @@ public interface UserService {
 	void updateUser(User user);
 
 	Set<Role> getUserRoles(String login);
-
+	User getUserByEmail(String email);
 }

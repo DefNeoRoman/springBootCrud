@@ -22,13 +22,13 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 @Controller
 public class Oauth2Controller {
 
 
+    public static final String DEFAULT_USER_NAME = "oAuthUser";
     private final UserService userService;
     private final OauthServiceProvider serviceProvider;
     private final Logger logger = Logger.getLogger(Oauth2Controller.class.getName());
@@ -63,13 +63,17 @@ public class Oauth2Controller {
         user.setRoles(roles);
         try {
             HashMap hashMap = mapper.readValue(body, HashMap.class);
+
             String emailAddress = (String)hashMap.get("emailAddress");
-            user.setName(emailAddress);
+            user.setEmail(emailAddress);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        user.setName(UUID.randomUUID().toString());
-        userService.addUser(user);
+        user.setName(DEFAULT_USER_NAME);
+        User userByEmail = userService.getUserByEmail(user.getEmail());
+        if(userByEmail == null){
+            userService.addUser(user);
+        }
         SecurityContext context = SecurityContextHolder.getContext();
         context.setAuthentication(new UsernamePasswordAuthenticationToken(user,"user"));
         return "redirect:/user";

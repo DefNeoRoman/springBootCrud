@@ -55,5 +55,10 @@ public class UserServiceImpl implements UserService {
 		return userDAO.getUserByUsername(username).getRoles();
 	}
 
+	@Override
+	public User getUserByEmail(String email) {
+		return null;
+	}
+
 
 }
