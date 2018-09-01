@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,8 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     private final UserDetailsServiceImpl userDetailsService;
 
     private final AuthSuccessHandler customizeAuthenticationSuccessHandler;
+
+
 
     @Autowired
     public AppSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthSuccessHandler customizeAuthenticationSuccessHandler) {
@@ -38,7 +41,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf()
                 .disable()
                 .authorizeRequests()
-                .antMatchers("/resources/**", "/webjars/**","/register","/rest/user/**","/login").permitAll()
+                .antMatchers("/resources/**", "/webjars/**","/register","/rest/user/**","/login","/user/googleEnter","/googleCallBack").permitAll()
                 .antMatchers("/user/**","/adminTask").access("hasRole('ROLE_ADMIN')")
                 .antMatchers("/userTask").access("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
                 .anyRequest().authenticated()
