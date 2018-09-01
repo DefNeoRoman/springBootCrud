@@ -1,3 +1,5 @@
+package app.examples;
+
 import com.github.scribejava.apis.GoogleApi20;
 import com.github.scribejava.core.builder.ServiceBuilder;
 import com.github.scribejava.core.model.OAuth2AccessToken;
@@ -10,10 +12,10 @@ import java.util.*;
 
 public class TestRole {
 
-    private static String clientId = "47900127570-nnom98ab0tdrsuavgtbiraplocr77rn8.apps.googleusercontent.com";
-    private static String clientSecret="_0bGyS-XhD3TalqGvFAdw4Be";
+    private static String clientId = "64106157599-j0c0ea9mgj164enuhm6ehdq1tnjp3li3.apps.googleusercontent.com";
+    private static String clientSecret="zoYRhHqjIUph2hZXo1fILE9J";
     private static final String NETWORK_NAME = "http://localhost:8080";
-    private static final String PROTECTED_RESOURCE_URL = "http://localhost:8080/rest/user/all";
+
 
     public void test(){
         List<Integer> integers = new ArrayList<>();
@@ -37,8 +39,8 @@ public class TestRole {
     public static void main (String... args){
 
         final OAuth20Service service = new ServiceBuilder().apiKey(clientId)
-                .apiSecret(clientSecret).scope("profile")
-                .callback("http://localhost:8080/login")
+                .apiSecret(clientSecret).scope("https://mail.google.com/")
+                .callback("http://localhost:8080/googleCallBack")
                 .build(GoogleApi20.instance());
         final Scanner in = new Scanner(System.in, "UTF-8");
         System.out.println("=== " + NETWORK_NAME + "'s OAuth Workflow ===");
@@ -66,9 +68,13 @@ public class TestRole {
         System.out.println();
         System.out.println("Now we're going to access a protected resource...");
         System.out.println("Paste fieldnames to fetch (leave empty to get profile, 'exit' to stop example)");
-        final OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL,service);
-        service.signRequest(accessToken, request);
-        String response = request.send().getBody();
-        System.out.println(response);
+       // final OAuthRequest request = new OAuthRequest(Verb.GET, PROTECTED_RESOURCE_URL,service);
+        final OAuthRequest request2 = new OAuthRequest(Verb.GET, "https://www.googleapis.com/gmail/v1/users/me/profile",service);
+
+//        service.signRequest(accessToken, request);
+//        String response = request.send().getBody();
+        service.signRequest(accessToken,request2);
+        System.out.println(request2.send().getBody());
+
     }
 }
