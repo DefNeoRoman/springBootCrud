@@ -59,6 +59,7 @@ public class Oauth2Controller {
     }
     @GetMapping("googleCallBack")
     public String callBack(@RequestParam String code) {
+        
         OAuth2AccessToken accessToken = googleService.getAccessToken(new Verifier(code));
         accessToken = googleService.refreshAccessToken(accessToken.getRefreshToken());
         final OAuthRequest request = new OAuthRequest(Verb.GET, "https://www.googleapis.com/gmail/v1/users/me/profile",googleService);
